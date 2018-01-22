@@ -23,4 +23,24 @@ router.get("/client_token", function (req, res) {
   });
 });
 
+router.post("/checkout", function (req, res) {
+  var nonceFromTheClient = req.body.payment_method_nonce;
+  gateway.transaction.sale({
+	  amount: "10.00",
+	  paymentMethodNonce: nonceFromTheClient,
+	  options: {
+	    submitForSettlement: true
+	  }
+	}, function (err, result) {
+		if(err) {
+		   res.send(err);
+		}else {
+		   res.send(result);
+		}
+
+	});
+
+  // Use payment method nonce here
+});
+
 module.exports = router;
